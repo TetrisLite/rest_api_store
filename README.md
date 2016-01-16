@@ -1,1 +1,1 @@
-In this project we are creating a simple rest api which will be used to create, read, update and delete from a Postgres database (at the point of writing this document an export of the database is attached to the project). 
+In this project we are creating a simple REST API which will be used to create, read, update and delete from a Postgres database (at the point of writing this document an export of the database is attached to the project). 
