@@ -1,0 +1,4 @@
+ServiceStore:
+  adaptor: postgresql
+  username: postgres
+  database: ServiceStore
