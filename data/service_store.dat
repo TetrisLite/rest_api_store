@@ -1,0 +1,106 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: movies; Type: TABLE; Schema: public; Owner: Owner; Tablespace:
+--
+
+CREATE TABLE movies (
+    id integer NOT NULL,
+    title character(80),
+    director character(80),
+    synopsis text,
+    year integer
+);
+
+
+ALTER TABLE movies OWNER TO "";
+
+--
+-- Name: movies_id_seq; Type: SEQUENCE; Schema: public; Owner: owner
+--
+
+CREATE SEQUENCE movies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE movies_id_seq OWNER TO "owner";
+
+--
+-- Name: movies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: owner
+--
+
+ALTER SEQUENCE movies_id_seq OWNED BY movies.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: owner
+--
+
+ALTER TABLE ONLY movies ALTER COLUMN id SET DEFAULT nextval('movies_id_seq'::regclass);
+
+
+--
+-- Data for Name: movies; Type: TABLE DATA; Schema: public; Owner: owner
+--
+
+COPY movies (id, title, director, synopsis, year) FROM stdin;
+1	Creed                                                                           	Ryan Coogler                                                                    	The former World Heavyweight Champion Rocky Balboa serves as a trainer and mentor to Adonis Johnson, the son of his late friend and former rival Apollo Creed.	2015
+2	The Revenant                                                                    	Alejandro Gonzalez Inarritu                                                     	A frontiersman on a fur trading expedition in the 1820s fights for survival after being mauled by a bear and left for dead by members of his own hunting team.	2015
+3	The Hateful Eight                                                               	Quentin Tarantino                                                               	In the dead of a Wyoming winter, a bounty hunter and his prisoner find shelter in a cabin currently inhabited by a collection of nefarious characters.	2015
+4	STAR WARS - The Force Awakens                                                   	JJ Adams                                                                        	Three decades after the defeat of the Galactic Empire, a new threat arises. The First Order attempts to rule the galaxy and only a ragtag group of heroes can stop them, along with the help of the Resistance.	2015
+\.
+
+
+--
+-- Name: movies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: owner
+--
+
+SELECT pg_catalog.setval('movies_id_seq', 4, true);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: owner
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM "owner";
+GRANT ALL ON SCHEMA public TO "owner";
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
