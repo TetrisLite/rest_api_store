@@ -9,10 +9,11 @@ end
 
 post "/api/movies" do
   body = JSON.parse(request.body.read)
-  movie = Movie.create(title: body["title"],
-  director: body["director"],
-  year: body["year"],
-  synopsis: body["synopsis"]
+  movie = Movie.create
+    (title: body["title"],
+    director: body["director"],
+    year: body["year"],
+    synopsis: body["synopsis"]
   )
   status(201)
   format_response(movie, request.accept)
