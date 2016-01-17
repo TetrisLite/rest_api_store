@@ -1,0 +1,5 @@
+require "json"
+require "sinatra"
+require_relative "models/movie.rb"
+require_relative "helpers/response_format.rb"
+require_relative "routes/movies.rb"
