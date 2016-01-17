@@ -4,4 +4,4 @@ To start the REST API (Sinatra app) on the Terminal go to the project root and d
 ```ruby
   ruby launcher.rb
 ```
-This will start the Webrick server on localhost 4567.
+This will start the Thin web server on localhost port 4567.
