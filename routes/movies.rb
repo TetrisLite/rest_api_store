@@ -9,7 +9,7 @@ end
 
 post "/api/movies" do
   body = JSON.parse(request.body.read)
-  movie = Movie.create(
+  movie ||= Movie.create(
     title: body["title"],
     director: body["director"],
     year: body["year"],
