@@ -10,6 +10,6 @@ module Sinatra
       end
     end
   end
-  #this will enhance sinatras methods with our own defined methods
+  #this will enhance sinatra's methods with our own defined methods
   helpers(ResponseFormat)
 end

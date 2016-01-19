@@ -1,11 +1,14 @@
 describe "Rest API" do
+
+  let(:movies_endpoint) {'http://localhost:4567/api/movies'}
+
   context "for movies endpoint" do
     context "HTTP Get request" do
       it 'returns all movies' do
         #get the count of all the records from the movie table in the database
         expected_number_of_movies = Movie.all.size
         #compare that with a count of whats returned from the movies api endpint '/api/movies'
-        parsed_json_response = JSON.parse(RestClient.get('http://localhost:4567/api/movies'))
+        parsed_json_response = JSON.parse(RestClient.get(movies_endpoint))
         actual_number_of_movies = parsed_json_response.size
         expect(expected_number_of_movies).to eql(actual_number_of_movies)
       end
@@ -16,25 +19,32 @@ describe "Rest API" do
         #check the details for the id from the db
         expected_movie = Movie.find(expected_id)
         #compare that against the id from the service endpoint
-        parsed_json_response = JSON.parse(RestClient.get("http://localhost:4567/api/movies/#{expected_id}"))
+        parsed_json_response = JSON.parse(RestClient.get("#{movies_endpoint}/#{expected_id}"))
 
         expect(expected_movie.title).to eql(parsed_json_response['title'])
         expect(expected_movie.director).to eql(parsed_json_response['director'])
         expect(expected_movie.year).to eql(parsed_json_response['year'])
         expect(expected_movie.synopsis).to eql(parsed_json_response['synopsis'])
-
       end
 
-      it 'returns a 404 error response for an invalid id' do
-        # invalid_id = 12
-        # response = RestClient.get("http://localhost:4567/api/movies/#{invalid_id}")
-        # expect(response.code).to eql(500)
+      it 'returns a 500 error response for an invalid id' do
+        invalid_id = Movie.last.id + 1
+        response = RestClient.get("#{movies_endpoint}/#{invalid_id}"){|response, request, result| response }
+        expect(response.code).to eql(500)
       end
     end
 
     context "HTTP Post request" do
-      it "" do
-        pending "not yet implemented"
+      it "creates a new movie" do
+        params = {
+          :director => "Francis #{rand(70000)}" ,
+          :year => rand(1997..2016),
+          :title => "The Hunger #{rand(1997..2016)} #{rand(1997..2016)}",
+          :synopsis => "As the war of Panem escalates to the...."
+        }
+
+        response = RestClient.post movies_endpoint, params.to_json
+        expect(response.code).to eql(201)
       end
     end
 
@@ -44,16 +54,27 @@ describe "Rest API" do
         # now store the value of that id
         movie_id = Movie.last.id
         # now make a request to the endpoint to delete by that id
-        RestClient.delete("http://localhost:4567/api/movies/#{movie_id}")
-        # confirm the deleted last record by using the find method on that id
-        # deleted_movie_id = Movie.find(movie_id)
-        # and expect to get nil response as confirmation of the delete.
-        expect(Movie.find(movie_id)).to raise_error(ActiveRecord::RecordNotFound)
+        RestClient.delete("#{movies_endpoint}/#{movie_id}")
+        all_movie_ids = Movie.ids
+        expect(all_movie_ids).to_not include movie_id
       end
     end
 
     context "HTTP Put request" do
-      pending "not yet implemented"
+      it "updates a record for a given id" do
+        last_movie_id = Movie.last.id
+        params = params = {
+          :director => "Updated #{rand(70000)}" ,
+          :year => rand(1997..2016),
+          :title => "Updated The Hunger #{rand(1997..2016)} #{rand(1997..2016)}",
+          :synopsis => "Updated As the war of Panem escalates to the...."
+        }
+
+        response = RestClient.put "#{movies_endpoint}/#{last_movie_id}", params.to_json
+        expect(response.code).to eql(200)
+        expect(response.headers[:server]).to eql('thin')
+        expect(response.headers[:connection]).to eql('keep-alive')
+      end
     end
   end
 end

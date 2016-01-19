@@ -35,6 +35,7 @@ put "/api/movies/:id" do
 end
 
 delete "/api/movies/:id" do
+
   movie ||= Movie.find_by(id: params[:id]) || halt(404)
   halt(500) unless movie.destroy
 end
